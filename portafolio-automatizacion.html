@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automatización de Procesos Industriales y de Servicios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0d1a26;
+    --bg-panel:#12233370;
+    --bg-panel-solid:#16283a;
+    --line:#274054;
+    --amber:#e8a33d;
+    --amber-dim:#8a6321;
+    --teal:#4fd1c5;
+    --text:#e9eef3;
+    --text-muted:#93a7ba;
+    --danger-stripe:#1a2733;
+    --radius-plate: 4px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg-deep);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,.plate-label{
+    font-family:'Space Grotesk',sans-serif;
+  }
+
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  a{color:inherit;}
+
+  /* ---------- Fondo de plano/blueprint ---------- */
+  .blueprint-bg{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background-color:var(--bg-deep);
+    background-image:
+      linear-gradient(rgba(79,209,197,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,209,197,0.06) 1px, transparent 1px);
+    background-size:42px 42px;
+  }
+
+  /* ---------- PORTADA ---------- */
+  .portada{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:6vh 6vw;
+    position:relative;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+
+  .portada .rivet{
+    position:absolute;
+    width:10px;height:10px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #4a6580, #16232f);
+    box-shadow:0 0 0 2px #0a141d;
+  }
+  .rivet.tl{top:22px;left:22px;}
+  .rivet.tr{top:22px;right:22px;}
+  .rivet.bl{bottom:22px;left:22px;}
+  .rivet.br{bottom:22px;right:22px;}
+
+  .eyebrow-panel{
+    display:inline-flex;
+    align-items:center;
+    gap:.6em;
+    padding:.5em 1.1em;
+    border:1px solid var(--line);
+    border-radius:2px;
+    background:rgba(22,40,58,0.6);
+    color:var(--teal);
+    font-family:'JetBrains Mono',monospace;
+    font-size:.78rem;
+    letter-spacing:.02em;
+    margin-bottom:2.2rem;
+  }
+  .eyebrow-panel .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 8px var(--teal);
+  }
+
+  .portada h1{
+    font-size:clamp(2rem, 6vw, 4.2rem);
+    font-weight:700;
+    line-height:1.08;
+    max-width:16ch;
+    margin:0 0 1.4rem 0;
+    color:var(--text);
+  }
+
+  .portada .subrayado{
+    color:var(--amber);
+  }
+
+  .portada p.descripcion{
+    max-width:56ch;
+    color:var(--text-muted);
+    font-size:1.05rem;
+    margin:0 0 3.2rem 0;
+  }
+
+  .nameplate{
+    border:1px solid var(--amber-dim);
+    background:linear-gradient(180deg, #1c2c3d, #14212f);
+    padding:1.1rem 2rem;
+    border-radius:var(--radius-plate);
+    display:inline-flex;
+    flex-direction:column;
+    gap:.15rem;
+    position:relative;
+  }
+  .nameplate::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;
+    height:2px;
+    background:linear-gradient(90deg, transparent, var(--amber), transparent);
+  }
+  .nameplate .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.68rem;
+    letter-spacing:.14em;
+    color:var(--text-muted);
+  }
+  .nameplate .autor{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:1.15rem;
+    font-weight:600;
+    color:var(--amber);
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:28px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+    color:var(--text-muted);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.4rem;
+  }
+  .scroll-cue .barra{
+    width:1px;height:26px;
+    background:linear-gradient(var(--teal), transparent);
+    animation:baja 1.8s infinite;
+  }
+  @keyframes baja{
+    0%{transform:translateY(-6px);opacity:0;}
+    50%{opacity:1;}
+    100%{transform:translateY(6px);opacity:0;}
+  }
+
+  /* ---------- CATÁLOGO ---------- */
+  #catalogo{
+    padding:5.5rem 6vw 6rem;
+    max-width:1180px;
+    margin:0 auto;
+  }
+
+  .catalogo-cabecera{
+    max-width:60ch;
+    margin-bottom:3rem;
+  }
+  .catalogo-cabecera .kicker{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--teal);
+    font-size:.78rem;
+    letter-spacing:.05em;
+    margin:0 0 .8rem 0;
+  }
+  .catalogo-cabecera h2{
+    font-size:clamp(1.6rem, 3.2vw, 2.3rem);
+    margin:0 0 .8rem 0;
+  }
+  .catalogo-cabecera p{
+    color:var(--text-muted);
+    margin:0;
+  }
+
+  .grid-cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+    gap:1.4rem;
+  }
+
+  .card{
+    display:block;
+    text-decoration:none;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:1.6rem 1.5rem 1.8rem;
+    cursor:pointer;
+    position:relative;
+    transition:border-color .18s ease, transform .18s ease;
+  }
+  .card:hover, .card:focus-visible{
+    border-color:var(--teal);
+    transform:translateY(-3px);
+    outline:none;
+  }
+  .card:focus-visible{
+    box-shadow:0 0 0 2px rgba(79,209,197,0.4);
+  }
+
+  .card .icon-wrap{
+    width:56px;height:56px;
+    border-radius:3px;
+    background:#0e1c29;
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:1.2rem;
+  }
+  .card .icon-wrap svg{
+    width:30px;height:30px;
+    stroke:var(--amber);
+    fill:none;
+  }
+
+  .card h3{
+    font-size:1.12rem;
+    margin:0 0 .5rem 0;
+    color:var(--text);
+  }
+  .card p{
+    font-size:.92rem;
+    color:var(--text-muted);
+    margin:0 0 1rem 0;
+  }
+  .card .card-tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.7rem;
+    color:var(--teal);
+    letter-spacing:.04em;
+  }
+  .card.card--pendiente .card-tag{color:var(--text-muted);}
+
+  /* ---------- SECCIONES DE CONTENIDO (detalle) ---------- */
+  .vista-detalle{
+    display:none;
+    padding:4.5rem 6vw 6rem;
+    max-width:840px;
+    margin:0 auto;
+  }
+  .vista-detalle.activa{
+    display:block;
+  }
+
+  .volver{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.78rem;
+    color:var(--teal);
+    text-decoration:none;
+    border:1px solid var(--line);
+    padding:.5em 1em;
+    border-radius:2px;
+    margin-bottom:2.6rem;
+    background:rgba(22,40,58,0.4);
+  }
+  .volver:hover{border-color:var(--teal);}
+
+  .vista-detalle .kicker{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--amber);
+    font-size:.78rem;
+    letter-spacing:.05em;
+    margin:0 0 .8rem 0;
+  }
+
+  .vista-detalle h2{
+    font-size:clamp(1.7rem, 4vw, 2.5rem);
+    margin:0 0 1.6rem 0;
+    line-height:1.15;
+  }
+
+  .vista-detalle h3{
+    font-size:1.25rem;
+    margin:2.4rem 0 1rem 0;
+    color:var(--text);
+    border-left:3px solid var(--amber);
+    padding-left:.7rem;
+  }
+
+  .vista-detalle p{
+    color:#c7d3de;
+    font-size:1rem;
+    margin:0 0 1.1rem 0;
+  }
+
+  .glosario{
+    display:grid;
+    gap:.9rem;
+    margin:1.2rem 0 2rem 0;
+  }
+  .glosario dt{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    color:var(--teal);
+    font-size:.98rem;
+  }
+  .glosario dd{
+    margin:.25rem 0 0 0;
+    color:#c7d3de;
+    font-size:.94rem;
+  }
+
+  .nota-panel{
+    border:1px solid var(--line);
+    border-left:3px solid var(--teal);
+    background:var(--bg-panel);
+    padding:1.1rem 1.3rem;
+    border-radius:2px;
+    margin:1.6rem 0;
+    font-size:.94rem;
+    color:#c7d3de;
+  }
+
+  .pasos{
+    counter-reset:paso;
+    list-style:none;
+    padding:0;
+    margin:1.2rem 0 2rem 0;
+    display:grid;
+    gap:1rem;
+  }
+  .pasos li{
+    counter-increment:paso;
+    position:relative;
+    padding-left:2.6rem;
+    color:#c7d3de;
+    font-size:.95rem;
+  }
+  .pasos li::before{
+    content: counter(paso);
+    position:absolute;
+    left:0;top:-.1rem;
+    width:1.9rem;height:1.9rem;
+    border:1px solid var(--amber-dim);
+    border-radius:2px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;
+    color:var(--amber);
+    font-size:.85rem;
+  }
+  .pasos strong{color:var(--text);}
+
+  footer{
+    text-align:center;
+    padding:2.4rem 6vw;
+    color:var(--text-muted);
+    font-family:'JetBrains Mono',monospace;
+    font-size:.75rem;
+    border-top:1px solid var(--line);
+  }
+
+  /* ---------- RESPONSIVE MÓVIL ---------- */
+  @media (max-width:640px){
+    .portada{padding:8vh 6vw;}
+    .nameplate{padding:.9rem 1.3rem;}
+    #catalogo{padding:3.6rem 6vw 4rem;}
+    .vista-detalle{padding:3.2rem 6vw 4rem;}
+    .grid-cards{grid-template-columns:1fr;}
+    .vista-detalle h3{margin-top:1.8rem;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .scroll-cue .barra{animation:none;}
+    html{scroll-behavior:auto;}
+    .card{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="blueprint-bg"></div>
+
+<!-- ===================== PORTADA ===================== -->
+<section class="portada" id="inicio">
+  <span class="rivet tl"></span><span class="rivet tr"></span>
+  <span class="rivet bl"></span><span class="rivet br"></span>
+
+  <div class="eyebrow-panel">
+    <span class="dot"></span>
+    Portafolio técnico
+  </div>
+
+  <h1>Automatización de <span class="subrayado">Procesos Industriales</span> y de Servicios</h1>
+
+  <p class="descripcion">
+    Un recorrido por los fundamentos, el vocabulario técnico y las herramientas —Arduino e IoT—
+    que hacen posible controlar, medir y conectar procesos reales.
+  </p>
+
+  <div class="nameplate">
+    <span class="label">TRABAJO REALIZADO POR</span>
+    <span class="autor">Noé de Jesús González Espinosa</span>
+  </div>
+
+  <div class="scroll-cue">
+    <span>CATÁLOGO</span>
+    <span class="barra"></span>
+  </div>
+</section>
+
+<!-- ===================== CATÁLOGO ===================== -->
+<section id="catalogo">
+  <div class="catalogo-cabecera">
+    <p class="kicker">// TEMAS</p>
+    <h2>Explora el contenido</h2>
+    <p>Selecciona una tarjeta para abrir la información completa del tema.</p>
+  </div>
+
+  <div class="grid-cards">
+
+    <a class="card" href="#detalle-fundamentos" data-target="detalle-fundamentos">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </div>
+      <h3>Fundamentos de Automatización</h3>
+      <p>Introducción, conceptos clave y el entorno Arduino e IoT como puerta de entrada práctica.</p>
+      <span class="card-tag">ABRIR CONTENIDO →</span>
+    </a>
+
+    <a class="card card--pendiente" href="#detalle-arduino" data-target="detalle-arduino">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="7" width="18" height="10" rx="2"></rect>
+          <path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"></path>
+          <circle cx="8" cy="12" r="1.4"></circle>
+          <circle cx="16" cy="12" r="1.4"></circle>
+        </svg>
+      </div>
+      <h3>Arduino: plataforma de prototipado</h3>
+      <p>Placas, entradas/salidas y el papel de Arduino como cerebro de bajo costo en automatización.</p>
+      <span class="card-tag">EN DESARROLLO</span>
+    </a>
+
+    <a class="card card--pendiente" href="#detalle-iot" data-target="detalle-iot">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+          <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+          <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+          <circle cx="12" cy="20" r="1"></circle>
+        </svg>
+      </div>
+      <h3>IoT: Internet de las Cosas</h3>
+      <p>Cómo los dispositivos se conectan, envían datos y se supervisan de forma remota.</p>
+      <span class="card-tag">EN DESARROLLO</span>
+    </a>
+
+    <a class="card card--pendiente" href="#detalle-sensores" data-target="detalle-sensores">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v4"></path>
+          <path d="M12 18v4"></path>
+          <path d="M4.93 4.93l2.83 2.83"></path>
+          <path d="M16.24 16.24l2.83 2.83"></path>
+          <path d="M2 12h4"></path>
+          <path d="M18 12h4"></path>
+          <circle cx="12" cy="12" r="4"></circle>
+        </svg>
+      </div>
+      <h3>Sensores y Actuadores</h3>
+      <p>Los "sentidos" y los "músculos" de todo sistema automático.</p>
+      <span class="card-tag">EN DESARROLLO</span>
+    </a>
+
+    <a class="card card--pendiente" href="#detalle-control" data-target="detalle-control">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+          <path d="M7 9h.01"></path>
+          <path d="M7 13h.01"></path>
+          <path d="M11 9h6"></path>
+          <path d="M11 13h6"></path>
+          <path d="M7 17h10"></path>
+        </svg>
+      </div>
+      <h3>Sistemas de Control</h3>
+      <p>Lazo abierto, lazo cerrado, PLC y SCADA: cómo se decide qué hacer y cuándo.</p>
+      <span class="card-tag">EN DESARROLLO</span>
+    </a>
+
+    <a class="card card--pendiente" href="#detalle-glosario" data-target="detalle-glosario">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+      </div>
+      <h3>Glosario General</h3>
+      <p>Términos técnicos completos del portafolio, en un solo lugar.</p>
+      <span class="card-tag">EN DESARROLLO</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- ===================== DETALLE: FUNDAMENTOS ===================== -->
+<section class="vista-detalle" id="detalle-fundamentos">
+  <a href="#catalogo" class="volver" data-target="catalogo">← Volver al catálogo</a>
+
+  <p class="kicker">TEMA 01 · FUNDAMENTOS</p>
+  <h2>Introducción a la Automatización de Procesos Industriales y de Servicios</h2>
+
+  <p>
+    La automatización es la disciplina que permite que una máquina o un sistema realice una tarea
+    de forma total o parcial sin intervención humana directa, tomando decisiones a partir de
+    información que recibe del entorno. En la industria se usa para fabricar, ensamblar o transportar
+    productos; en los servicios, para gestionar procesos como el control de accesos, la climatización
+    de un edificio, la facturación o el monitoreo remoto de equipos.
+  </p>
+  <p>
+    Detrás de cualquier proceso automatizado —desde una línea de embotellado hasta un termostato
+    inteligente— existe la misma idea central: <strong>medir, decidir y actuar</strong>. Un sensor mide una
+    condición del proceso, un controlador decide qué se debe hacer con esa información, y un
+    actuador ejecuta la acción física correspondiente.
+  </p>
+
+  <h3>Conceptos clave</h3>
+  <p>Estos son los términos que aparecerán una y otra vez a lo largo del portafolio:</p>
+
+  <dl class="glosario">
+    <div>
+      <dt>Proceso</dt>
+      <dd>Conjunto de operaciones que transforman una entrada en una salida (por ejemplo, materia prima en producto terminado, o una solicitud en un servicio completado).</dd>
+    </div>
+    <div>
+      <dt>Variable de proceso</dt>
+      <dd>Magnitud física que se mide y se busca mantener bajo control, como temperatura, presión, nivel, velocidad o flujo.</dd>
+    </div>
+    <div>
+      <dt>Sensor</dt>
+      <dd>Elemento que detecta una variable física y la convierte en una señal que el sistema puede interpretar.</dd>
+    </div>
+    <div>
+      <dt>Actuador</dt>
+      <dd>Elemento que ejecuta una acción física a partir de una orden del controlador: mover, calentar, abrir, encender.</dd>
+    </div>
+    <div>
+      <dt>Controlador</dt>
+      <dd>El "cerebro" del sistema. Compara el valor medido contra el valor deseado y calcula la acción necesaria. Puede ser un microcontrolador (como Arduino), un PLC o un programa de software.</dd>
+    </div>
+    <div>
+      <dt>Setpoint (punto de consigna)</dt>
+      <dd>Valor deseado de una variable de proceso, contra el cual el controlador compara la medición real.</dd>
+    </div>
+    <div>
+      <dt>Retroalimentación (feedback)</dt>
+      <dd>Información que regresa al controlador sobre el resultado real de su acción, permitiendo corregir el rumbo.</dd>
+    </div>
+    <div>
+      <dt>Lazo abierto vs. lazo cerrado</dt>
+      <dd>Un sistema en lazo abierto ejecuta una acción sin verificar el resultado; uno en lazo cerrado usa retroalimentación para ajustarse continuamente.</dd>
+    </div>
+    <div>
+      <dt>PLC (Controlador Lógico Programable)</dt>
+      <dd>Computadora industrial robusta, diseñada para controlar maquinaria y procesos en entornos exigentes.</dd>
+    </div>
+    <div>
+      <dt>HMI / SCADA</dt>
+      <dd>La HMI (interfaz humano-máquina) permite a una persona visualizar y operar el proceso; SCADA amplía esa supervisión a un sistema completo y distribuido.</dd>
+    </div>
+  </dl>
+
+  <h3>El entorno Arduino</h3>
+  <p>
+    Arduino es una plataforma de hardware y software libre, pensada para que cualquier persona pueda
+    construir prototipos de automatización sin necesidad de electrónica avanzada. Una placa Arduino
+    funciona como un pequeño controlador: lee señales de sensores a través de sus pines de entrada,
+    ejecuta un programa (llamado <em>sketch</em>) escrito en un lenguaje basado en C/C++, y envía
+    órdenes a actuadores mediante sus pines de salida.
+  </p>
+  <p>
+    Su popularidad en proyectos de automatización industrial y de servicios se debe a tres factores:
+    bajo costo, una comunidad enorme de soporte y documentación, y una gran cantidad de módulos
+    compatibles (relés, motores, pantallas, sensores de temperatura, humedad, distancia, etc.) que se
+    conectan de forma sencilla.
+  </p>
+
+  <div class="nota-panel">
+    Un flujo típico en Arduino: el sensor entrega una señal → el microcontrolador la lee y la
+    compara con una condición programada → si se cumple, activa un actuador (relé, motor, LED,
+    válvula) → opcionalmente, envía el dato a la nube para su registro o visualización remota.
+  </div>
+
+  <h3>De Arduino al IoT</h3>
+  <p>
+    El Internet de las Cosas (IoT, por sus siglas en inglés) consiste en conectar objetos físicos a
+    internet para que puedan enviar datos, recibir órdenes o ser monitoreados a distancia. Cuando un
+    proyecto de Arduino incorpora conectividad —normalmente mediante un módulo WiFi como el ESP8266
+    o el ESP32— el sistema deja de ser un dispositivo aislado y se convierte en un nodo de una red
+    más amplia.
+  </p>
+  <p>
+    En automatización industrial, a esta combinación se le conoce como IIoT (IoT Industrial). Permite,
+    por ejemplo, revisar desde un celular la temperatura de una cámara de refrigeración, recibir una
+    alerta cuando un tanque está por desbordarse, o registrar en la nube el consumo eléctrico de una
+    línea de producción para analizarlo después.
+  </p>
+
+  <ol class="pasos">
+    <li><strong>Captura:</strong> un sensor conectado a Arduino o a un módulo ESP mide una variable física.</li>
+    <li><strong>Procesamiento local:</strong> el microcontrolador decide si debe actuar de inmediato (por ejemplo, encender una alarma).</li>
+    <li><strong>Transmisión:</strong> el dato se envía por WiFi usando un protocolo ligero como MQTT o solicitudes HTTP.</li>
+    <li><strong>Nube y visualización:</strong> plataformas como ThingSpeak, Blynk o Node-RED reciben, almacenan y muestran la información en tableros accesibles desde cualquier lugar.</li>
+    <li><strong>Acción remota (opcional):</strong> desde esos mismos tableros, una persona puede enviar una orden de regreso al dispositivo, cerrando el ciclo.</li>
+  </ol>
+
+  <p>
+    En conjunto, estos fundamentos —proceso, sensor, actuador, controlador y retroalimentación—
+    junto con herramientas accesibles como Arduino y los protocolos del IoT, forman la base sobre la
+    que se construyen los demás temas de este portafolio.
+  </p>
+</section>
+
+<!-- ===================== DETALLES PENDIENTES (stubs) ===================== -->
+<section class="vista-detalle" id="detalle-arduino">
+  <a href="#catalogo" class="volver" data-target="catalogo">← Volver al catálogo</a>
+  <p class="kicker">TEMA 02 · ARDUINO</p>
+  <h2>Arduino: plataforma de prototipado</h2>
+  <p>Este contenido está en desarrollo. Aquí se profundizará en tipos de placas, pines, programación
+  con el IDE de Arduino y ejemplos de circuitos aplicados a automatización.</p>
+</section>
+
+<section class="vista-detalle" id="detalle-iot">
+  <a href="#catalogo" class="volver" data-target="catalogo">← Volver al catálogo</a>
+  <p class="kicker">TEMA 03 · IOT</p>
+  <h2>IoT: Internet de las Cosas</h2>
+  <p>Este contenido está en desarrollo. Se abordarán protocolos de comunicación, plataformas en la
+  nube y casos de uso de IoT industrial y de servicios.</p>
+</section>
+
+<section class="vista-detalle" id="detalle-sensores">
+  <a href="#catalogo" class="volver" data-target="catalogo">← Volver al catálogo</a>
+  <p class="kicker">TEMA 04 · SENSORES Y ACTUADORES</p>
+  <h2>Sensores y Actuadores</h2>
+  <p>Este contenido está en desarrollo. Incluirá una clasificación de sensores comunes (temperatura,
+  proximidad, humedad, presión) y actuadores (motores, relés, electroválvulas).</p>
+</section>
+
+<section class="vista-detalle" id="detalle-control">
+  <a href="#catalogo" class="volver" data-target="catalogo">← Volver al catálogo</a>
+  <p class="kicker">TEMA 05 · SISTEMAS DE CONTROL</p>
+  <h2>Sistemas de Control</h2>
+  <p>Este contenido está en desarrollo. Se explicarán los lazos de control, PLC, SCADA y su relación
+  con los procesos automatizados.</p>
+</section>
+
+<section class="vista-detalle" id="detalle-glosario">
+  <a href="#catalogo" class="volver" data-target="catalogo">← Volver al catálogo</a>
+  <p class="kicker">TEMA 06 · GLOSARIO</p>
+  <h2>Glosario General</h2>
+  <p>Este contenido está en desarrollo. Reunirá, en orden alfabético, todos los términos técnicos
+  utilizados en el portafolio.</p>
+</section>
+
+<footer>
+  PORTAFOLIO · AUTOMATIZACIÓN INDUSTRIAL Y DE SERVICIOS · N. GONZÁLEZ ESPINOSA
+</footer>
+
+<script>
+  const catalogo = document.getElementById('catalogo');
+  const portada = document.getElementById('inicio');
+  const vistas = document.querySelectorAll('.vista-detalle');
+
+  function mostrarDetalle(id){
+    vistas.forEach(v => v.classList.remove('activa'));
+    const destino = document.getElementById(id);
+    if(destino){
+      destino.classList.add('activa');
+      catalogo.style.display = 'none';
+      portada.style.display = 'none';
+      window.scrollTo({top:0, behavior:'instant'});
+    }
+  }
+
+  function mostrarCatalogo(){
+    vistas.forEach(v => v.classList.remove('activa'));
+    catalogo.style.display = 'block';
+    portada.style.display = 'flex';
+  }
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      mostrarDetalle(card.dataset.target);
+      history.pushState(null, '', '#' + card.dataset.target);
+    });
+  });
+
+  document.querySelectorAll('.volver').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      mostrarCatalogo();
+      history.pushState(null, '', '#catalogo');
+      catalogo.scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  window.addEventListener('popstate', () => {
+    const hash = location.hash.replace('#','');
+    if(hash && hash.startsWith('detalle-')){
+      mostrarDetalle(hash);
+    } else {
+      mostrarCatalogo();
+    }
+  });
+
+  // Al cargar, si la URL ya trae un hash de detalle, mostrarlo directamente
+  window.addEventListener('DOMContentLoaded', () => {
+    const hash = location.hash.replace('#','');
+    if(hash && hash.startsWith('detalle-')){
+      mostrarDetalle(hash);
+    }
+  });
+</script>
+
+</body>
+</html>
