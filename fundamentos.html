@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fundamentos de Automatización · Portafolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-deep:#0d1a26;
+  --bg-panel:#12233370;
+  --bg-panel-solid:#16283a;
+  --line:#274054;
+  --amber:#e8a33d;
+  --amber-dim:#8a6321;
+  --teal:#4fd1c5;
+  --text:#e9eef3;
+  --text-muted:#93a7ba;
+  --radius-plate: 4px;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg-deep);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,.plate-label{
+  font-family:'Space Grotesk',sans-serif;
+}
+
+.mono{font-family:'JetBrains Mono',monospace;}
+
+a{color:inherit;}
+
+/* ---------- Fondo de plano/blueprint ---------- */
+.blueprint-bg{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background-color:var(--bg-deep);
+  background-image:
+    linear-gradient(rgba(79,209,197,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79,209,197,0.06) 1px, transparent 1px);
+  background-size:42px 42px;
+}
+
+/* ---------- PÁGINA DE DETALLE ---------- */
+.vista-detalle{
+  padding:4.5rem 6vw 6rem;
+  max-width:840px;
+  margin:0 auto;
+}
+
+.volver{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.78rem;
+  color:var(--teal);
+  text-decoration:none;
+  border:1px solid var(--line);
+  padding:.5em 1em;
+  border-radius:2px;
+  margin-bottom:2.6rem;
+  background:rgba(22,40,58,0.4);
+}
+.volver:hover{border-color:var(--teal);}
+
+.vista-detalle .kicker{
+  font-family:'JetBrains Mono',monospace;
+  color:var(--amber);
+  font-size:.78rem;
+  letter-spacing:.05em;
+  margin:0 0 .8rem 0;
+}
+
+.vista-detalle h2{
+  font-size:clamp(1.7rem, 4vw, 2.5rem);
+  margin:0 0 1.6rem 0;
+  line-height:1.15;
+}
+
+.vista-detalle h3{
+  font-size:1.25rem;
+  margin:2.4rem 0 1rem 0;
+  color:var(--text);
+  border-left:3px solid var(--amber);
+  padding-left:.7rem;
+}
+
+.vista-detalle p{
+  color:#c7d3de;
+  font-size:1rem;
+  margin:0 0 1.1rem 0;
+}
+
+.glosario{
+  display:grid;
+  gap:.9rem;
+  margin:1.2rem 0 2rem 0;
+}
+.glosario dt{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:600;
+  color:var(--teal);
+  font-size:.98rem;
+}
+.glosario dd{
+  margin:.25rem 0 0 0;
+  color:#c7d3de;
+  font-size:.94rem;
+}
+
+.nota-panel{
+  border:1px solid var(--line);
+  border-left:3px solid var(--teal);
+  background:var(--bg-panel);
+  padding:1.1rem 1.3rem;
+  border-radius:2px;
+  margin:1.6rem 0;
+  font-size:.94rem;
+  color:#c7d3de;
+}
+
+.pasos{
+  counter-reset:paso;
+  list-style:none;
+  padding:0;
+  margin:1.2rem 0 2rem 0;
+  display:grid;
+  gap:1rem;
+}
+.pasos li{
+  counter-increment:paso;
+  position:relative;
+  padding-left:2.6rem;
+  color:#c7d3de;
+  font-size:.95rem;
+}
+.pasos li::before{
+  content: counter(paso);
+  position:absolute;
+  left:0;top:-.1rem;
+  width:1.9rem;height:1.9rem;
+  border:1px solid var(--amber-dim);
+  border-radius:2px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+  color:var(--amber);
+  font-size:.85rem;
+}
+.pasos strong{color:var(--text);}
+
+footer{
+  text-align:center;
+  padding:2.4rem 6vw;
+  color:var(--text-muted);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.75rem;
+  border-top:1px solid var(--line);
+}
+
+/* ---------- RESPONSIVE MÓVIL ---------- */
+@media (max-width:640px){
+  .vista-detalle{padding:3.2rem 6vw 4rem;}
+  .vista-detalle h3{margin-top:1.8rem;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+}
+</style>
+</head>
+<body>
+
+<div class="blueprint-bg"></div>
+
+<section class="vista-detalle" id="detalle-fundamentos">
+  <a href="index.html" class="volver">← Volver al catálogo</a>
+
+  <p class="kicker">TEMA 01 · FUNDAMENTOS</p>
+  <h2>Introducción a la Automatización de Procesos Industriales y de Servicios</h2>
+
+  <p>
+    La automatización es la disciplina que permite que una máquina o un sistema realice una tarea
+    de forma total o parcial sin intervención humana directa, tomando decisiones a partir de
+    información que recibe del entorno. En la industria se usa para fabricar, ensamblar o transportar
+    productos; en los servicios, para gestionar procesos como el control de accesos, la climatización
+    de un edificio, la facturación o el monitoreo remoto de equipos.
+  </p>
+  <p>
+    Detrás de cualquier proceso automatizado —desde una línea de embotellado hasta un termostato
+    inteligente— existe la misma idea central: <strong>medir, decidir y actuar</strong>. Un sensor mide una
+    condición del proceso, un controlador decide qué se debe hacer con esa información, y un
+    actuador ejecuta la acción física correspondiente.
+  </p>
+
+  <h3>Historia de la automatización</h3>
+  <p>
+    La idea de que las máquinas realicen tareas por sí solas no es nueva. Ya en el siglo XVIII, los
+    telares mecánicos y las máquinas de vapor de la Primera Revolución Industrial reemplazaron trabajo
+    manual repetitivo por mecanismos accionados por energía. A comienzos del siglo XX, la línea de
+    ensamble de Henry Ford introdujo la producción en serie, estandarizando procesos que antes
+    dependían por completo del criterio de cada trabajador.
+  </p>
+  <p>
+    El verdadero salto llegó en la segunda mitad del siglo XX, con la aparición de la electrónica y
+    la computación. En 1968 se creó el primer PLC (Controlador Lógico Programable), pensado para
+    sustituir los tableros de relés de la industria automotriz por lógica programable, mucho más
+    flexible y fácil de modificar. En las décadas siguientes surgieron los sistemas SCADA para
+    supervisar plantas completas a distancia, y los robots industriales comenzaron a ocupar tareas de
+    soldadura, pintura y ensamblaje.
+  </p>
+  <p>
+    Con la llegada de internet y el abaratamiento de la electrónica en los años 2000 y 2010, nacieron
+    plataformas de bajo costo como Arduino (2005), que democratizaron el acceso a la automatización:
+    ya no era necesario ser una gran fábrica para automatizar un proceso, bastaba con una placa,
+    algunos sensores y un poco de código. Esa misma década vio nacer el concepto de Internet de las
+    Cosas (IoT), que conectó los procesos automatizados a la nube, dando origen a lo que hoy se conoce
+    como la Cuarta Revolución Industrial o Industria 4.0.
+  </p>
+
+  <h3>Conceptos clave</h3>
+  <p>Estos son los términos que aparecerán una y otra vez a lo largo del portafolio:</p>
+
+  <dl class="glosario">
+    <div>
+      <dt>Proceso</dt>
+      <dd>Conjunto de operaciones que transforman una entrada en una salida (por ejemplo, materia prima en producto terminado, o una solicitud en un servicio completado).</dd>
+    </div>
+    <div>
+      <dt>Variable de proceso</dt>
+      <dd>Magnitud física que se mide y se busca mantener bajo control, como temperatura, presión, nivel, velocidad o flujo.</dd>
+    </div>
+    <div>
+      <dt>Sensor</dt>
+      <dd>Elemento que detecta una variable física y la convierte en una señal que el sistema puede interpretar.</dd>
+    </div>
+    <div>
+      <dt>Actuador</dt>
+      <dd>Elemento que ejecuta una acción física a partir de una orden del controlador: mover, calentar, abrir, encender.</dd>
+    </div>
+    <div>
+      <dt>Controlador</dt>
+      <dd>El "cerebro" del sistema. Compara el valor medido contra el valor deseado y calcula la acción necesaria. Puede ser un microcontrolador (como Arduino), un PLC o un programa de software.</dd>
+    </div>
+    <div>
+      <dt>Setpoint (punto de consigna)</dt>
+      <dd>Valor deseado de una variable de proceso, contra el cual el controlador compara la medición real.</dd>
+    </div>
+    <div>
+      <dt>Retroalimentación (feedback)</dt>
+      <dd>Información que regresa al controlador sobre el resultado real de su acción, permitiendo corregir el rumbo.</dd>
+    </div>
+    <div>
+      <dt>Lazo abierto vs. lazo cerrado</dt>
+      <dd>Un sistema en lazo abierto ejecuta una acción sin verificar el resultado; uno en lazo cerrado usa retroalimentación para ajustarse continuamente.</dd>
+    </div>
+    <div>
+      <dt>PLC (Controlador Lógico Programable)</dt>
+      <dd>Computadora industrial robusta, diseñada para controlar maquinaria y procesos en entornos exigentes.</dd>
+    </div>
+    <div>
+      <dt>HMI / SCADA</dt>
+      <dd>La HMI (interfaz humano-máquina) permite a una persona visualizar y operar el proceso; SCADA amplía esa supervisión a un sistema completo y distribuido.</dd>
+    </div>
+  </dl>
+
+  <h3>El ciclo de la automatización</h3>
+  <p>
+    Todo proceso automatizado, sin importar su tamaño o complejidad, repite un mismo ciclo de forma
+    continua. Entender este ciclo ayuda a identificar qué papel cumple cada componente:
+  </p>
+
+  <ol class="pasos">
+    <li><strong>Medición:</strong> el sensor capta el estado real de la variable de proceso (temperatura, nivel, posición, presencia, etc.).</li>
+    <li><strong>Comparación:</strong> el controlador compara el valor medido contra el setpoint o la condición deseada.</li>
+    <li><strong>Decisión:</strong> con base en esa comparación, el controlador calcula qué acción corregirá cualquier diferencia.</li>
+    <li><strong>Actuación:</strong> el actuador ejecuta físicamente la orden: enciende, apaga, abre, cierra o mueve algo.</li>
+    <li><strong>Retroalimentación:</strong> el sensor vuelve a medir el efecto de esa acción, y el ciclo comienza de nuevo.</li>
+  </ol>
+
+  <div class="nota-panel">
+    Este ciclo de medir → comparar → decidir → actuar → retroalimentar es el mismo tanto en una
+    válvula industrial controlada por PLC como en un foco inteligente que se enciende al detectar
+    movimiento: cambia la escala y la tecnología, pero no la lógica.
+  </div>
+
+  <h3>El entorno Arduino</h3>
+  <p>
+    Arduino es una plataforma de hardware y software libre, pensada para que cualquier persona pueda
+    construir prototipos de automatización sin necesidad de electrónica avanzada. Una placa Arduino
+    funciona como un pequeño controlador: lee señales de sensores a través de sus pines de entrada,
+    ejecuta un programa (llamado <em>sketch</em>) escrito en un lenguaje basado en C/C++, y envía
+    órdenes a actuadores mediante sus pines de salida.
+  </p>
+  <p>
+    Su popularidad en proyectos de automatización industrial y de servicios se debe a tres factores:
+    bajo costo, una comunidad enorme de soporte y documentación, y una gran cantidad de módulos
+    compatibles (relés, motores, pantallas, sensores de temperatura, humedad, distancia, etc.) que se
+    conectan de forma sencilla.
+  </p>
+
+  <div class="nota-panel">
+    Un flujo típico en Arduino: el sensor entrega una señal → el microcontrolador la lee y la
+    compara con una condición programada → si se cumple, activa un actuador (relé, motor, LED,
+    válvula) → opcionalmente, envía el dato a la nube para su registro o visualización remota.
+  </div>
+
+  <h3>De Arduino al IoT</h3>
+  <p>
+    El Internet de las Cosas (IoT, por sus siglas en inglés) consiste en conectar objetos físicos a
+    internet para que puedan enviar datos, recibir órdenes o ser monitoreados a distancia. Cuando un
+    proyecto de Arduino incorpora conectividad —normalmente mediante un módulo WiFi como el ESP8266
+    o el ESP32— el sistema deja de ser un dispositivo aislado y se convierte en un nodo de una red
+    más amplia.
+  </p>
+  <p>
+    En automatización industrial, a esta combinación se le conoce como IIoT (IoT Industrial). Permite,
+    por ejemplo, revisar desde un celular la temperatura de una cámara de refrigeración, recibir una
+    alerta cuando un tanque está por desbordarse, o registrar en la nube el consumo eléctrico de una
+    línea de producción para analizarlo después.
+  </p>
+
+  <ol class="pasos">
+    <li><strong>Captura:</strong> un sensor conectado a Arduino o a un módulo ESP mide una variable física.</li>
+    <li><strong>Procesamiento local:</strong> el microcontrolador decide si debe actuar de inmediato (por ejemplo, encender una alarma).</li>
+    <li><strong>Transmisión:</strong> el dato se envía por WiFi usando un protocolo ligero como MQTT o solicitudes HTTP.</li>
+    <li><strong>Nube y visualización:</strong> plataformas como ThingSpeak, Blynk o Node-RED reciben, almacenan y muestran la información en tableros accesibles desde cualquier lugar.</li>
+    <li><strong>Acción remota (opcional):</strong> desde esos mismos tableros, una persona puede enviar una orden de regreso al dispositivo, cerrando el ciclo.</li>
+  </ol>
+
+  <h3>Ventajas y desventajas</h3>
+  <p>
+    Automatizar un proceso trae beneficios claros, pero también implica costos y riesgos que conviene
+    tener presentes antes de implementarlo:
+  </p>
+
+  <dl class="glosario">
+    <div>
+      <dt>✔ Mayor precisión y consistencia</dt>
+      <dd>Una máquina repite una tarea de la misma forma miles de veces, reduciendo la variación que introduce el error humano.</dd>
+    </div>
+    <div>
+      <dt>✔ Aumento de productividad</dt>
+      <dd>Los sistemas automáticos pueden operar de forma continua, sin fatiga, y a mayor velocidad que un proceso manual.</dd>
+    </div>
+    <div>
+      <dt>✔ Mejora en la seguridad</dt>
+      <dd>Permite retirar a las personas de tareas peligrosas, como manejar temperaturas extremas, químicos o maquinaria pesada.</dd>
+    </div>
+    <div>
+      <dt>✔ Datos para tomar decisiones</dt>
+      <dd>Un sistema automatizado, especialmente uno conectado por IoT, genera información constante que puede analizarse para mejorar el proceso.</dd>
+    </div>
+    <div>
+      <dt>✘ Inversión inicial alta</dt>
+      <dd>Sensores, controladores, actuadores y su instalación representan un costo que no siempre se recupera de inmediato.</dd>
+    </div>
+    <div>
+      <dt>✘ Menor flexibilidad ante cambios imprevistos</dt>
+      <dd>Un sistema diseñado para una tarea específica puede requerir reprogramación o rediseño si el proceso cambia.</dd>
+    </div>
+    <div>
+      <dt>✘ Dependencia tecnológica</dt>
+      <dd>Una falla en el sensor, el controlador o la conexión a internet puede detener todo el proceso si no existe un respaldo.</dd>
+    </div>
+    <div>
+      <dt>✘ Impacto en el empleo</dt>
+      <dd>Tareas repetitivas que antes realizaba una persona pueden dejar de ser necesarias, lo que exige reubicar o capacitar al personal.</dd>
+    </div>
+  </dl>
+
+  <h3>Automatización industrial vs. automatización de servicios</h3>
+  <p>
+    Aunque comparten los mismos fundamentos —sensores, controladores y actuadores—, estos dos campos
+    se aplican en contextos distintos y con prioridades diferentes:
+  </p>
+
+  <dl class="glosario">
+    <div>
+      <dt>Objeto que se controla</dt>
+      <dd>La automatización industrial controla procesos físicos de producción: máquinas, líneas de ensamble, maquinaria pesada. La automatización de servicios controla procesos de atención o gestión: accesos, climatización, facturación, turnos, monitoreo remoto.</dd>
+    </div>
+    <div>
+      <dt>Entorno de operación</dt>
+      <dd>La industrial suele operar en plantas o fábricas, con condiciones exigentes (polvo, vibración, altas temperaturas). La de servicios opera en oficinas, comercios, hogares o edificios, con condiciones más controladas.</dd>
+    </div>
+    <div>
+      <dt>Prioridad principal</dt>
+      <dd>En la industria, la prioridad suele ser la producción: velocidad, precisión y volumen. En los servicios, la prioridad suele ser la experiencia: comodidad, rapidez de respuesta y disponibilidad para el usuario final.</dd>
+    </div>
+    <div>
+      <dt>Tecnología típica</dt>
+      <dd>La industrial se apoya en PLC, robots y SCADA, pensados para trabajo pesado y continuo. La de servicios se apoya con frecuencia en microcontroladores como Arduino/ESP32 y plataformas de IoT en la nube, orientadas a monitoreo y control remoto ligero.</dd>
+    </div>
+    <div>
+      <dt>Ejemplo</dt>
+      <dd>Industrial: un brazo robótico que suelda carrocerías de autos de forma repetitiva. Servicios: un sistema que ajusta automáticamente la temperatura de un consultorio según la ocupación detectada por un sensor.</dd>
+    </div>
+  </dl>
+
+  <p>
+    En conjunto, estos fundamentos —proceso, sensor, actuador, controlador y retroalimentación—
+    junto con herramientas accesibles como Arduino y los protocolos del IoT, forman la base sobre la
+    que se construyen los demás temas de este portafolio.
+  </p>
+
+  <a href="index.html" class="volver">← Volver al catálogo</a>
+</section>
+
+<footer>
+  PORTAFOLIO · AUTOMATIZACIÓN INDUSTRIAL Y DE SERVICIOS · N. GONZÁLEZ ESPINOSA
+</footer>
+
+</body>
+</html>
